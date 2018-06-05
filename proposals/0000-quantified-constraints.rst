@@ -32,7 +32,7 @@ The classic motivating example is this ::
  instance (Eq a, ???) => Eq (Rose f a)
    where
      (Branch x1 c1) == (Branch x2 c2)
-        = x1==x1 && c1==c2
+        = x1==x2 && c1==c2
 
 From the ``x1==x2`` we need ``Eq a``, which is fine.  From ``c1==c2`` we need ``Eq (f (Rose f a))`` which
 is *not* fine in Haskell today; we have no way to solve such a constraint.
@@ -44,7 +44,7 @@ instances, and indeed in any type signature.  In this case ::
         => Eq (Rose f a)
    where
      (Branch x1 c1) == (Branch x2 c2)
-        = x1==x1 && c1==c2
+        = x1==x2 && c1==c2
 
 A quantified constraint is a bit like a local instance declaration.
 
