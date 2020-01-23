@@ -68,7 +68,8 @@ All of this is already possible with current versions of GHC.
 
 This proposal introduces new syntax to specify whether a type variable should be
 required, specified or inferred when explicitly binding a variable.
-A previous proposal which has recently been implemented, proposal 99,
+A previous proposal which has recently been implemented,
+`proposal 99 <https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0099-explicit-specificity.rst>`_,
 already has this feature in type signatures, data constructor
 declarations, pattern synonyms etc.
 This work makes for a natural extension of proposal 99, by extending its scope
@@ -79,7 +80,20 @@ More concretely, proposal 99 enables syntax like
  typeRep :: forall {k} (a :: k). Typeable a => TypeRep a
 Note the braces surrounding the ``k``. This new form of type variable binder
 marks the variable as inferred.
-
+This syntax makes perfect sense in data, class and type declarations as well,
+and so we propose to enable the following syntactic forms
+::
+ data D4 k    (a :: k) = K4
+ data D5 @k   (a :: k) = K5
+ data D6 @{k} (a :: k) = K6
+which should result in the following kind for ``D4``, ``D5`` and ``D6``
+respectively
+::
+ forall k -> k -> Type
+ forall k.   k -> Type
+ forall {k}. k -> Type
+Note that the kind variable ``k`` in these examples is **required**,
+**specified** and **inferred** respectively.
 
 Motivation
 ----------
