@@ -55,16 +55,21 @@ Note that in this case, the kind variable ``k`` is **specified**, meaning that
 users can choose to explicitly pass in the kind for ``k`` as well as the type
 for ``a``. For example, users could either write ``D2 Int`` and ``D2 Type Int``.
 
-Finally, let's say we want to explicitly bind the kind ``k``, which would look
-as follows
+It is however really useful to explicitly annotate kind-polymorphic code.
+So for our final example, let's explicitly
+bind the kind ``k``, which would look as follows
 ::
  data D3 k (a :: k) = K3
 If we now ask GHC for the kind of ``D3``, we get
 ::
  forall k -> k -> Type
-Note that the kind variable ``k`` has become **required**, meaning that users
-have to instantiate the kind before they can instantiate the type.
-All of this is already possible with current versions of GHC.
+Note however that the kind variable ``k`` has suddenly become **required**,
+meaning that users
+have to instantiate the kind before they can instantiate the type, which might
+not be desireable.
+
+Note that none of these examples are new and this is already possible with
+current versions of GHC.
 
 This proposal introduces new syntax to specify whether a type variable should be
 required, specified or inferred when explicitly binding a variable.
@@ -97,12 +102,21 @@ Note that the kind variable ``k`` in these examples is **required**,
 
 Motivation
 ----------
-Give a strong reason for why the community needs this change. Describe the use
-case as clearly as possible and give an example. Explain how the status quo is
-insufficient or not ideal.
 
-A good Motivation section is often driven by examples and real-world scenarios.
+- The introduction illustrates the first motivation: we want to explicitly
+  clarify kind polymorphic code, without altering the way users should
+  instantiate these types.
 
+- A second motivation is consistency: non-experts in the language might be
+  surprised to see this explicit specificity syntax in type signatures and find
+  out that it is not possible to write the same
+  in a type declaration, for instance. There is no clear reason why this should
+  not be accepted.
+
+- A third motivation can be found in 
+  `proposal 99 <https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0099-explicit-specificity.rst>`_,
+  namely altering the order in which types should be instantiated (more details
+  and an example in the original proposal).
 
 Proposed Change Specification
 -----------------------------
